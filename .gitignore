@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Data (too large for GitHub)
+data/
+checkpoints/
+*.pth
+*.onnx
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temp files
+*.tmp
+*.log
+paper_rendered.html
+
+# Scratch scripts used during development
+humanize_sections.py
+fix_remaining.py
+update_docx.py
+extracted_paper_text.txt

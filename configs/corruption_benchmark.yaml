@@ -1,0 +1,145 @@
+# ==============================================================================
+# Robustness Benchmark Configuration: Real-World Image Quality Variations
+# Inspired by ImageNet-C, tailored for Agricultural Smartphone Leaf Diagnostics
+# ==============================================================================
+
+categories:
+  blur:
+    - gaussian_blur
+    - motion_blur
+    - defocus_blur
+  noise:
+    - gaussian_noise
+    - shot_noise
+    - salt_and_pepper_noise
+  weather_and_lighting:
+    - overexposure
+    - underexposure
+    - shadow_gradient
+    - color_temperature_shift
+  digital:
+    - jpeg_compression
+    - low_resolution_downsample
+
+severity_levels: [1, 2, 3, 4, 5]
+
+corruptions:
+  gaussian_blur:
+    description: "Camera defocus or hand tremor causing Gaussian point-spread function blur"
+    category: "blur"
+    severities:
+      1: { kernel_size: 5, sigma: 1.0 }
+      2: { kernel_size: 9, sigma: 2.0 }
+      3: { kernel_size: 15, sigma: 3.5 }
+      4: { kernel_size: 21, sigma: 5.0 }
+      5: { kernel_size: 31, sigma: 7.5 }
+
+  motion_blur:
+    description: "Linear motion blur from moving foliage or mobile phone movement"
+    category: "blur"
+    severities:
+      1: { kernel_size: 7, angle: 45 }
+      2: { kernel_size: 13, angle: 45 }
+      3: { kernel_size: 21, angle: 45 }
+      4: { kernel_size: 29, angle: 45 }
+      5: { kernel_size: 41, angle: 45 }
+
+  defocus_blur:
+    description: "Lens out of focus creating disk-shaped blur kernel"
+    category: "blur"
+    severities:
+      1: { radius: 2 }
+      2: { radius: 4 }
+      3: { radius: 6 }
+      4: { radius: 9 }
+      5: { radius: 13 }
+
+  gaussian_noise:
+    description: "Sensor thermal and electronic read noise under low light conditions"
+    category: "noise"
+    severities:
+      1: { var: 0.005 }
+      2: { var: 0.015 }
+      3: { var: 0.035 }
+      4: { var: 0.065 }
+      5: { var: 0.120 }
+
+  shot_noise:
+    description: "Poisson noise caused by photon arrival fluctuations"
+    category: "noise"
+    severities:
+      1: { scale: 50.0 }
+      2: { scale: 25.0 }
+      3: { scale: 12.0 }
+      4: { scale: 6.0 }
+      5: { scale: 3.0 }
+
+  salt_and_pepper_noise:
+    description: "Impulsive transmission and analog-to-digital sensor conversion noise"
+    category: "noise"
+    severities:
+      1: { amount: 0.008 }
+      2: { amount: 0.025 }
+      3: { amount: 0.055 }
+      4: { amount: 0.100 }
+      5: { amount: 0.180 }
+
+  overexposure:
+    description: "Harsh outdoor sunlight and direct solar reflection causing blown-out highlights"
+    category: "weather_and_lighting"
+    severities:
+      1: { factor: 1.25 }
+      2: { factor: 1.50 }
+      3: { factor: 1.80 }
+      4: { factor: 2.20 }
+      5: { factor: 2.70 }
+
+  underexposure:
+    description: "Dense canopy shade, cloud cover, or dusk conditions causing dark imagery"
+    category: "weather_and_lighting"
+    severities:
+      1: { factor: 0.80 }
+      2: { factor: 0.65 }
+      3: { factor: 0.50 }
+      4: { factor: 0.35 }
+      5: { factor: 0.20 }
+
+  shadow_gradient:
+    description: "Uneven partial leaf shadowing from upper branch canopies"
+    category: "weather_and_lighting"
+    severities:
+      1: { shadow_intensity: 0.25, angle: 30 }
+      2: { shadow_intensity: 0.40, angle: 30 }
+      3: { shadow_intensity: 0.55, angle: 45 }
+      4: { shadow_intensity: 0.70, angle: 45 }
+      5: { shadow_intensity: 0.85, angle: 60 }
+
+  color_temperature_shift:
+    description: "Golden hour sunset (warm shift) or overcast blue daylight (cool shift)"
+    category: "weather_and_lighting"
+    severities:
+      1: { shift: 20 }
+      2: { shift: 40 }
+      3: { shift: 65 }
+      4: { shift: 90 }
+      5: { shift: 120 }
+
+  jpeg_compression:
+    description: "Blocky DCT compression artifacts from mobile chat apps (WhatsApp, Telegram)"
+    category: "digital"
+    severities:
+      1: { quality: 60 }
+      2: { quality: 40 }
+      3: { quality: 25 }
+      4: { quality: 15 }
+      5: { quality: 7 }
+
+  low_resolution_downsample:
+    description: "Low-end feature phone camera resolution downsampled and upscaled"
+    category: "digital"
+    severities:
+      1: { scale_factor: 0.75 }
+      2: { scale_factor: 0.50 }
+      3: { scale_factor: 0.35 }
+      4: { scale_factor: 0.25 }
+      5: { scale_factor: 0.15 }

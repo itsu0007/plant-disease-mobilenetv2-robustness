@@ -1,0 +1,76 @@
+# ==============================================================================
+# Robust Plant Disease Detection Configuration
+# Architecture: MobileNetV2 with Robust Head & Quality Degradation Modeling
+# ==============================================================================
+
+project:
+  name: "plant_disease_mobilenetv2_robustness"
+  description: "Robust Plant Disease Detection under Real-World Image Quality Variation"
+  version: "1.0.0"
+  random_seed: 42
+  device: "cuda"  # "cuda" or "cpu"
+
+# Dataset settings
+data:
+  data_dir: "data/plant_dataset"
+  synthetic_fallback_dir: "data/synthetic_sample"
+  img_size: 224
+  batch_size: 32
+  num_workers: 2
+  val_split: 0.15
+  test_split: 0.15
+  num_classes: 35
+  normalization:
+    mean: [0.485, 0.456, 0.406]
+    std: [0.229, 0.224, 0.225]
+
+# Model Architecture
+model:
+  backbone: "mobilenet_v2"
+  pretrained: true
+  dropout_rate: 0.3
+  use_attention: true          # Squeeze-and-Excitation / CBAM attention block
+  attention_type: "cbam"       # "cbam" or "se"
+  freeze_backbone_epochs: 3    # Progressive fine-tuning
+  classifier_head:
+    hidden_dim: 512
+    use_batchnorm: true
+
+# Training Hyperparameters
+training:
+  epochs: 25
+  optimizer: "adamw"           # "adamw" or "sgd"
+  learning_rate: 0.0005
+  min_lr: 1.0e-6
+  weight_decay: 0.01
+  momentum: 0.9                # For SGD
+  scheduler: "cosine_warmup"   # "cosine_warmup", "step", "reduce_on_plateau"
+  warmup_epochs: 3
+  mixed_precision: true        # Automatic Mixed Precision (AMP) for RTX GPUs
+  label_smoothing: 0.1         # Regularization against noisy labels and corrupted images
+  early_stopping_patience: 8
+  gradient_clip_norm: 1.0
+
+# Robust Training Augmentations (Active during Robust Model Training)
+robust_augmentation:
+  enabled: true
+  corruption_prob: 0.75        # Probability of injecting simulated real-world degradation
+  cutmix_prob: 0.3
+  mixup_prob: 0.2
+  simulated_corruptions:
+    - "gaussian_blur"
+    - "motion_blur"
+    - "gaussian_noise"
+    - "shot_noise"
+    - "brightness_contrast"
+    - "jpeg_compression"
+    - "shadow_gradient"
+    - "color_jitter"
+
+# Artifacts & Checkpointing
+paths:
+  checkpoints_dir: "checkpoints"
+  baseline_checkpoint: "checkpoints/mobilenetv2_baseline.pth"
+  robust_checkpoint: "checkpoints/mobilenetv2_robust.pth"
+  onnx_export_path: "checkpoints/mobilenetv2_robust.onnx"
+  benchmark_results_dir: "results"
