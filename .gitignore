@@ -27,6 +27,11 @@ checkpoints/
 Thumbs.db
 desktop.ini
 
+# Research paper documents
+*Research_Paper*
+*.pdf
+*.docx
+
 # Temp files
 *.tmp
 *.log
